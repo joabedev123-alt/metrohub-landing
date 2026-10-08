@@ -1,0 +1,184 @@
+@import 'tailwindcss';
+
+@theme {
+  --font-sans: 'Inter Variable', 'Inter', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+
+  --color-ink: #050507;
+  --color-graphite: #111218;
+  --color-graphite-soft: #1a1c24;
+  --color-mist: #f5f7fa;
+  --color-line: #e2e6ee;
+  --color-muted: #4a5061;
+  --color-muted-dark: #a4a9b7;
+  --color-error: #b4202f;
+
+  --color-brand-blue: #344ab2;
+  --color-brand-blue-deep: #2a3c94;
+  --color-brand-blue-bright: #4b63d6;
+  --color-brand-cyan: #29b8cd;
+  --color-brand-purple: #7527aa;
+  --color-brand-magenta: #d3268a;
+  --color-brand-rose: #ed344d;
+
+  --shadow-card: 0 1px 2px rgb(5 5 7 / 0.04), 0 8px 24px -12px rgb(5 5 7 / 0.08);
+  --shadow-card-hover: 0 2px 4px rgb(5 5 7 / 0.04), 0 18px 40px -18px rgb(52 74 178 / 0.28);
+}
+
+@layer base {
+  html {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+    scroll-padding-top: 72px;
+    -webkit-text-size-adjust: 100%;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  @media (min-width: 1024px) {
+    html {
+      scroll-padding-top: 80px;
+    }
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    html {
+      scroll-behavior: smooth;
+    }
+  }
+
+  body {
+    @apply bg-white font-sans text-graphite;
+    font-feature-settings: 'cv11', 'ss01';
+  }
+
+  html.has-modal {
+    overflow: hidden;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-brand-blue);
+    outline-offset: 3px;
+    border-radius: 6px;
+  }
+
+  .on-dark :focus-visible {
+    outline-color: var(--color-brand-cyan);
+  }
+
+  .on-dark .on-light :focus-visible {
+    outline-color: var(--color-brand-blue);
+  }
+
+  ::selection {
+    background: rgb(41 184 205 / 0.28);
+  }
+}
+
+@layer components {
+  :root {
+    --gutter: 1.25rem;
+  }
+
+  @media (min-width: 640px) {
+    :root {
+      --gutter: 1.5rem;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    :root {
+      --gutter: 2rem;
+    }
+  }
+
+  .container-page {
+    @apply mx-auto w-full max-w-[1200px];
+    padding-left: max(var(--gutter, 1.25rem), env(safe-area-inset-left));
+    padding-right: max(var(--gutter, 1.25rem), env(safe-area-inset-right));
+  }
+
+  .section {
+    @apply py-16 md:py-24 lg:py-28;
+  }
+
+  .eyebrow {
+    @apply inline-flex items-center gap-2.5 text-xs font-semibold tracking-[0.16em] uppercase;
+  }
+
+  .eyebrow::before {
+    content: '';
+    @apply h-px w-6 bg-gradient-to-r from-brand-cyan to-brand-blue;
+  }
+
+  .accent-rule {
+    @apply h-[2px] w-12 rounded-full bg-gradient-to-r from-brand-cyan via-brand-blue to-brand-purple;
+  }
+}
+
+/* Inline Bootstrap Icons */
+.bi-icon {
+  display: inline-flex;
+  flex-shrink: 0;
+  line-height: 0;
+}
+
+.bi-icon svg {
+  width: 1em;
+  height: 1em;
+}
+
+/* Entrance animation: subtle and skipped entirely for reduced motion. */
+.reveal {
+  opacity: 0;
+  transform: translateY(14px);
+  transition:
+    opacity 0.6s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+  transition-delay: var(--reveal-delay, 0ms);
+}
+
+.reveal.is-visible {
+  opacity: 1;
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+
+/* Hero graphic signal flow */
+@keyframes flow {
+  to {
+    stroke-dashoffset: -40;
+  }
+}
+
+.flow-line {
+  stroke-dasharray: 4 6;
+  animation: flow 2.4s linear infinite;
+}
+
+@keyframes pulse-ring {
+  0%,
+  100% {
+    opacity: 0.35;
+  }
+  50% {
+    opacity: 0.8;
+  }
+}
+
+.pulse-ring {
+  animation: pulse-ring 4s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .flow-line,
+  .pulse-ring {
+    animation: none;
+  }
+}
