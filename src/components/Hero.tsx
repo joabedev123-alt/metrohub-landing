@@ -36,10 +36,6 @@ export function Hero() {
                 Partner With Us
                 <Icon name="arrow-right" className="transition-transform duration-200 group-hover:translate-x-0.5 motion-reduce:transition-none" />
               </a>
-              <p className="inline-flex items-center gap-2 text-sm text-white/65">
-                <Icon name="geo-alt" className="text-brand-cyan" />
-                Bethel, Connecticut · USA
-              </p>
             </div>
           </Reveal>
 

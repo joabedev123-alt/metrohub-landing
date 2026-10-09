@@ -16,6 +16,8 @@ export const siteConfig = {
   location: {
     street: '18 Hudson St',
     postalCode: '06801',
+    /** Google Maps place link. */
+    mapsUrl: 'https://maps.app.goo.gl/dHEyBA5SGFGsJVBs9',
     city: 'Bethel',
     stateCode: 'CT',
     state: 'Connecticut',

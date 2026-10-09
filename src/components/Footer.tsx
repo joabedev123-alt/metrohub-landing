@@ -30,7 +30,7 @@ export function Footer({ onOpenPrivacy }: FooterProps) {
       icon: 'geo-alt',
       label: 'Address',
       value: `${location.street}, ${location.city}, ${location.stateCode} ${location.postalCode} – ${location.country}`,
-      href: `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${location.street}, ${location.city}, ${location.stateCode} ${location.postalCode}`)}`,
+      href: location.mapsUrl,
       external: true,
     },
     contact.email
