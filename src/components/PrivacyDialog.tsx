@@ -30,7 +30,6 @@ export function PrivacyDialog({ open, onClose }: PrivacyDialogProps) {
   }
 
   const { contact, legalName, location, privacyPolicy } = siteConfig
-  const contactLine = [contact.email, contact.phone].filter(Boolean).join(' · ')
 
   return (
     <dialog
@@ -62,13 +61,7 @@ export function PrivacyDialog({ open, onClose }: PrivacyDialogProps) {
           </button>
         </div>
 
-        <div className="overflow-y-auto px-6 py-6 text-[15px] leading-relaxed text-muted sm:px-8 [&_h3]:mt-7 [&_h3]:mb-2 [&_h3]:text-[15px] [&_h3]:font-semibold [&_h3]:text-ink [&_li]:ml-5 [&_li]:list-disc [&_p+p]:mt-3 [&_ul]:mt-2 [&_ul]:space-y-1">
-          {!privacyPolicy.reviewed && (
-            <p className="mb-6 rounded-xl border border-dashed border-brand-purple/40 bg-brand-purple/[0.04] px-4 py-3 text-[13px] text-brand-purple">
-              Draft — this policy must be reviewed before the site is published.
-            </p>
-          )}
-
+        <div className="overflow-y-auto px-6 py-6 text-[15px] leading-relaxed text-muted sm:px-8 [&_h3]:mt-7 [&_h3]:mb-2 [&_h3]:text-[15px] [&_h3]:font-semibold [&_h3]:text-ink [&_li]:ml-5 [&_li]:list-disc [&_p+p]:mt-3 [&_ul+p]:mt-3 [&_ul]:mt-2 [&_ul]:space-y-1">
           <p>
             This Privacy Policy explains how {legalName} (&ldquo;Metrohub,&rdquo; &ldquo;we,&rdquo; or
             &ldquo;us&rdquo;) handles information submitted through this website. This site is
@@ -77,15 +70,13 @@ export function PrivacyDialog({ open, onClose }: PrivacyDialogProps) {
           </p>
 
           <h3>Information We Collect</h3>
-          <p>We collect only the information you choose to submit through the vendor inquiry form:</p>
+          <p>We collect only the information you choose to submit through the contact form:</p>
           <ul>
-            <li>Company name</li>
-            <li>Contact person name</li>
-            <li>Product category or line</li>
-            <li>
-              Your message, including any business contact details (such as an email address or
-              phone number) you include so we can respond
-            </li>
+            <li>Name</li>
+            <li>Company (optional)</li>
+            <li>Phone number (optional)</li>
+            <li>Email address</li>
+            <li>Your message</li>
           </ul>
           <p>
             This website does not use advertising or analytics cookies. As with most websites, the
@@ -95,20 +86,20 @@ export function PrivacyDialog({ open, onClose }: PrivacyDialogProps) {
 
           <h3>How We Use Your Information</h3>
           <p>
-            We use the information you submit to review and respond to your inquiry, evaluate
+            We use the information you submit to review and respond to your message, evaluate
             potential business relationships, and communicate with you about them.
           </p>
 
           <h3>How Information Is Shared</h3>
           <p>
             We do not sell your information. Form submissions are delivered to Metrohub through the
-            service we use to receive website inquiries. We may also disclose information when
+            service we use to receive website messages. We may also disclose information when
             required by law.
           </p>
 
           <h3>Retention</h3>
           <p>
-            We keep inquiry information only as long as reasonably needed to respond to you, manage
+            We keep contact form information only as long as reasonably needed to respond to you, manage
             any resulting business relationship, or meet legal obligations.
           </p>
 
@@ -127,7 +118,21 @@ export function PrivacyDialog({ open, onClose }: PrivacyDialogProps) {
             <br />
             {location.city}, {location.state}, {location.country}
             <br />
-            {contactLine || `${contact.emailPlaceholder} · ${contact.phonePlaceholder}`}
+            {contact.email ? (
+              <a href={'mailto:' + contact.email} className="-my-3 inline-block py-3 text-brand-blue underline underline-offset-4">
+                {contact.email}
+              </a>
+            ) : (
+              contact.emailPlaceholder
+            )}
+            <br />
+            {contact.phone ? (
+              <a href={'tel:' + contact.phoneE164} className="-my-3 inline-block py-3 text-brand-blue underline underline-offset-4">
+                {contact.phone}
+              </a>
+            ) : (
+              contact.phonePlaceholder
+            )}
           </p>
         </div>
       </div>

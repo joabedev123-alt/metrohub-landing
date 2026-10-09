@@ -1,7 +1,8 @@
 export type InquiryPayload = {
-  companyName: string
-  contactName: string
-  productCategory: string
+  name: string
+  company: string
+  phone: string
+  email: string
   message: string
 }
 
@@ -15,7 +16,7 @@ export class InquiryNotConfiguredError extends Error {
 const REQUEST_TIMEOUT_MS = 15000
 
 /**
- * Sends a vendor inquiry to the endpoint defined in VITE_FORM_ENDPOINT.
+ * Sends a contact form message to the endpoint defined in VITE_FORM_ENDPOINT.
  * Throws when the endpoint is missing or the request does not succeed, so the
  * UI never reports a delivery that did not happen.
  */
@@ -32,7 +33,8 @@ export async function submitInquiry(payload: InquiryPayload): Promise<void> {
       headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
       body: JSON.stringify({
         ...payload,
-        _subject: `Vendor inquiry: ${payload.companyName}`,
+        _replyto: payload.email,
+        _subject: `Website message from ${payload.name}${payload.company ? ` (${payload.company})` : ''}`,
       }),
       signal: controller.signal,
     })

@@ -11,48 +11,59 @@ type Status = 'idle' | 'submitting' | 'success' | 'error'
 type FieldConfig = {
   name: FieldName
   label: string
+  type: 'text' | 'email' | 'tel'
   autoComplete: string
   autoCapitalize: string
   maxLength: number
+  required: boolean
   multiline?: boolean
-  hint?: string
+  fullWidth?: boolean
 }
 
 const FIELDS: FieldConfig[] = [
-  { name: 'companyName', label: 'Company Name', autoComplete: 'organization', autoCapitalize: 'words', maxLength: 120 },
-  { name: 'contactName', label: 'Contact Person Name', autoComplete: 'name', autoCapitalize: 'words', maxLength: 100 },
-  { name: 'productCategory', label: 'Product Category / Line', autoComplete: 'off', autoCapitalize: 'sentences', maxLength: 120 },
+  { name: 'name', label: 'Name', type: 'text', autoComplete: 'name', autoCapitalize: 'words', maxLength: 100, required: true },
+  { name: 'company', label: 'Company', type: 'text', autoComplete: 'organization', autoCapitalize: 'words', maxLength: 120, required: false },
+  { name: 'phone', label: 'Phone', type: 'tel', autoComplete: 'tel', autoCapitalize: 'off', maxLength: 30, required: false },
+  { name: 'email', label: 'Email', type: 'email', autoComplete: 'email', autoCapitalize: 'off', maxLength: 160, required: true },
   {
     name: 'message',
-    label: 'Message / Inquiry',
+    label: 'Message',
+    type: 'text',
     autoComplete: 'off',
     autoCapitalize: 'sentences',
     maxLength: 2000,
+    required: true,
     multiline: true,
-    hint: 'Please include your business email or phone number so our team can respond.',
+    fullWidth: true,
   },
 ]
 
-const EMPTY: Values = { companyName: '', contactName: '', productCategory: '', message: '' }
-const MESSAGE_MIN_LENGTH = 20
+const EMPTY: Values = { name: '', company: '', phone: '', email: '', message: '' }
+const MESSAGE_MIN_LENGTH = 10
+const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/
 
 function validateField(name: FieldName, raw: string): string | undefined {
   const value = raw.trim()
   switch (name) {
-    case 'companyName':
-      if (!value) return 'Enter your company name.'
-      if (value.length < 2) return 'Company name must be at least 2 characters.'
+    case 'name':
+      if (!value) return 'Enter your name.'
+      if (value.length < 2) return 'Name must be at least 2 characters.'
       return
-    case 'contactName':
-      if (!value) return "Enter the contact person's name."
-      if (value.length < 2) return 'Contact name must be at least 2 characters.'
+    case 'company':
       return
-    case 'productCategory':
-      if (!value) return 'Enter a product category or line.'
-      if (value.length < 2) return 'Product category must be at least 2 characters.'
+    case 'phone': {
+      if (!value) return
+      const digits = value.replace(/\D/g, '')
+      if (!/^[\d\s()+.\-x]+$/i.test(value) || digits.length < 7 || digits.length > 15)
+        return 'Enter a valid phone number, e.g. (914) 555-0100.'
+      return
+    }
+    case 'email':
+      if (!value) return 'Enter your email address.'
+      if (!EMAIL_PATTERN.test(value)) return 'Enter a valid email address, e.g. name@company.com.'
       return
     case 'message':
-      if (!value) return 'Enter your message or inquiry.'
+      if (!value) return 'Enter your message.'
       if (value.length < MESSAGE_MIN_LENGTH)
         return `Your message must be at least ${MESSAGE_MIN_LENGTH} characters.`
       return
@@ -103,7 +114,7 @@ export function VendorForm() {
 
     const nextErrors = validateAll(values)
     setErrors(nextErrors)
-    setTouched({ companyName: true, contactName: true, productCategory: true, message: true })
+    setTouched({ name: true, company: true, phone: true, email: true, message: true })
 
     const firstInvalid = FIELDS.find((field) => nextErrors[field.name])
     if (firstInvalid) {
@@ -120,13 +131,14 @@ export function VendorForm() {
 
     inFlight.current = true
     setStatus('submitting')
-    setStatusMessage('Sending your inquiry…')
+    setStatusMessage('Sending your message…')
 
     try {
       await submitInquiry({
-        companyName: values.companyName.trim(),
-        contactName: values.contactName.trim(),
-        productCategory: values.productCategory.trim(),
+        name: values.name.trim(),
+        company: values.company.trim(),
+        phone: values.phone.trim(),
+        email: values.email.trim(),
         message: values.message.trim(),
       })
       setValues(EMPTY)
@@ -140,15 +152,15 @@ export function VendorForm() {
       if (error instanceof InquiryNotConfiguredError) {
         setStatusMessage(
           siteConfig.contact.email
-            ? `Online inquiries are not available yet, so your message was not sent. Please email us at ${siteConfig.contact.email}.`
-            : 'Online inquiries are not available yet, so your message was not sent. Your information has been kept on this page.',
+            ? `The contact form is not available yet, so your message was not sent. Please email us at ${siteConfig.contact.email}.`
+            : 'The contact form is not available yet, so your message was not sent. Your information has been kept on this page.',
         )
         if (import.meta.env.DEV) {
           console.warn('[VendorForm] VITE_FORM_ENDPOINT is not set. See .env.example.')
         }
       } else {
         setStatusMessage(
-          'We could not send your inquiry. Please check your connection and try again — your information has been kept.',
+          'We could not send your message. Please check your connection and try again — your information has been kept.',
         )
       }
     } finally {
@@ -163,20 +175,20 @@ export function VendorForm() {
           <Icon name="check2-circle" />
         </span>
         <h3 ref={successRef} tabIndex={-1} className="mt-6 text-2xl font-semibold tracking-[-0.01em] focus:outline-none">
-          Thank you. Your inquiry has been sent.
+          Thank you. Your message has been sent.
         </h3>
         <p className="mt-3 max-w-md leading-relaxed text-muted">
-          Our team will review your message and respond using the contact details you provided.
+          Our team will review your message and get back to you shortly.
         </p>
         <button
           type="button"
           onClick={() => {
             setStatus('idle')
-            requestAnimationFrame(() => fieldRefs.current.companyName?.focus())
+            requestAnimationFrame(() => fieldRefs.current.name?.focus())
           }}
           className="mt-8 inline-flex h-11 items-center gap-2 rounded-xl border border-line px-5 text-sm font-semibold text-ink transition-colors hover:border-brand-blue/40 hover:text-brand-blue"
         >
-          Send another inquiry
+          Send another message
         </button>
       </div>
     )
@@ -192,18 +204,15 @@ export function VendorForm() {
       aria-busy={submitting}
       className="on-light rounded-2xl bg-white p-5 text-ink min-[400px]:p-6 shadow-[0_30px_80px_-30px_rgb(0_0_0/0.6)] sm:p-9"
     >
-      <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
-        <h3 id={`${formId}-title`} className="text-xl font-semibold tracking-[-0.01em]">
-          Vendor Inquiry
-        </h3>
-        <p className="text-[13px] text-muted">All fields are required.</p>
-      </div>
+      <h3 id={`${formId}-title`} className="text-xl font-semibold tracking-[-0.01em]">
+        Get in Touch
+      </h3>
 
-      <div className="mt-7 grid gap-5 sm:grid-cols-2">
+      <div className="mt-7 grid grid-cols-1 gap-5 sm:grid-cols-2">
         {FIELDS.map((field) => {
           const id = fieldId(field.name)
           const error = touched[field.name] ? errors[field.name] : undefined
-          const describedBy = [field.hint && `${id}-hint`, error && `${id}-error`].filter(Boolean).join(' ') || undefined
+          const describedBy = error ? `${id}-error` : undefined
           const control =
             'w-full rounded-xl border bg-white px-4 text-base text-ink placeholder:text-[#8a8f9c] transition-[border-color,box-shadow] focus:outline-none focus-visible:outline-none disabled:cursor-not-allowed disabled:bg-mist ' +
             (error
@@ -211,12 +220,14 @@ export function VendorForm() {
               : 'border-[#cfd5df] hover:border-[#b5bdcb] focus:border-brand-blue focus:ring-4 focus:ring-brand-blue/15')
 
           return (
-            <div key={field.name} className={field.multiline || field.name === 'productCategory' ? 'sm:col-span-2' : ''}>
+            <div key={field.name} className={field.fullWidth ? 'sm:col-span-2' : ''}>
               <label htmlFor={id} className="mb-2 block text-[14px] font-medium text-ink">
                 {field.label}
-                <span aria-hidden="true" className="ml-0.5 text-brand-blue">
-                  *
-                </span>
+                {field.required && (
+                  <span aria-hidden="true" className="ml-0.5 text-brand-blue">
+                    *
+                  </span>
+                )}
               </label>
               {field.multiline ? (
                 <textarea
@@ -226,7 +237,7 @@ export function VendorForm() {
                     fieldRefs.current[field.name] = node
                   }}
                   rows={5}
-                  required
+                  required={field.required}
                   minLength={MESSAGE_MIN_LENGTH}
                   maxLength={field.maxLength}
                   autoComplete={field.autoComplete}
@@ -243,11 +254,13 @@ export function VendorForm() {
                 <input
                   id={id}
                   name={field.name}
-                  type="text"
+                  type={field.type}
+                  inputMode={field.type === 'tel' ? 'tel' : field.type === 'email' ? 'email' : undefined}
+                  spellCheck={field.type === 'text'}
                   ref={(node) => {
                     fieldRefs.current[field.name] = node
                   }}
-                  required
+                  required={field.required}
                   maxLength={field.maxLength}
                   autoComplete={field.autoComplete}
                   autoCapitalize={field.autoCapitalize}
@@ -260,12 +273,6 @@ export function VendorForm() {
                   aria-describedby={describedBy}
                   className={`${control} h-12`}
                 />
-              )}
-              {field.hint && (
-                <p id={`${id}-hint`} className="mt-2 flex gap-2 text-[13px] leading-snug text-muted">
-                  <Icon name="info-circle" className="mt-px text-brand-blue" />
-                  {field.hint}
-                </p>
               )}
               {error && (
                 <p id={`${id}-error`} className="mt-2 flex items-center gap-1.5 text-[13px] font-medium text-error">
@@ -308,11 +315,11 @@ export function VendorForm() {
               className="h-4 w-4 animate-spin rounded-full border-2 border-white/40 border-t-white motion-reduce:animate-none"
               aria-hidden="true"
             />
-            Submitting…
+            Sending…
           </>
         ) : (
           <>
-            Submit Vendor Inquiry
+            Send Message
             <Icon name="send" />
           </>
         )}

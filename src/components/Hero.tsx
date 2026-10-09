@@ -12,25 +12,18 @@ export function Hero() {
         <div className="absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-white/15 to-transparent" />
       </div>
 
-      <div className="container-page grid items-center gap-12 pt-32 pb-20 sm:pt-36 md:pb-24 lg:min-h-[min(100svh,860px)] lg:grid-cols-[1.12fr_0.88fr] lg:gap-10 lg:pt-36 lg:pb-28">
+      <div className="container-page grid grid-cols-1 items-center gap-12 pt-[132px] pb-20 sm:pt-[144px] md:pb-24 lg:min-h-[min(100svh,860px)] lg:grid-cols-[1.12fr_0.88fr] lg:gap-10 lg:pt-[160px] lg:pb-28">
         <div className="max-w-[640px]">
           <Reveal>
-            <h1>
-              <span className="flex items-center gap-3 text-[13px] font-semibold tracking-[0.2em] text-brand-cyan uppercase">
-                <span>Metrohub LLC</span>
-                <span className="sr-only"> | </span>
-                <span aria-hidden="true" className="accent-rule" />
-              </span>
-              <span className="mt-6 block text-[clamp(2.15rem,1.35rem+3.4vw,3.85rem)] leading-[1.06] font-semibold tracking-[-0.025em] text-balance">
-                Building, Scaling &amp; Managing{' '}
-                <span className="text-white/60">Wholesale Distribution Networks</span>
-              </span>
+            <h1 className="text-[clamp(1.85rem,1.2rem+3.4vw,3.85rem)] leading-[1.06] font-semibold tracking-[-0.025em] text-balance">
+              Building, Scaling &amp; Managing{' '}
+              <span className="text-white/60">Wholesale Distribution Networks</span>
             </h1>
           </Reveal>
 
           <Reveal delay={80}>
             <p className="mt-6 max-w-[540px] text-[17px] leading-relaxed text-muted-dark sm:text-lg">
-              A Bethel, CT-based consumer goods enterprise optimizing retail &amp; e-commerce channels.
+              A US-based e-commerce &amp; wholesale enterprise managing multi-channel product distribution.
             </p>
           </Reveal>
 

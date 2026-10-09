@@ -29,14 +29,20 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     text-rendering: optimizeLegibility;
-    scroll-padding-top: 72px;
+    scroll-padding-top: 98px;
     -webkit-text-size-adjust: 100%;
     -webkit-tap-highlight-color: transparent;
   }
 
   @media (min-width: 1024px) {
     html {
-      scroll-padding-top: 80px;
+      scroll-padding-top: 114px;
+    }
+  }
+
+  @media (max-height: 500px) {
+    html {
+      scroll-padding-top: 72px;
     }
   }
 

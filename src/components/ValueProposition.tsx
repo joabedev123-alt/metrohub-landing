@@ -16,7 +16,7 @@ export function ValueProposition() {
             aria-hidden="true"
             className="absolute inset-x-0 top-0 h-[2px] bg-gradient-to-r from-brand-cyan via-brand-blue to-brand-magenta opacity-80"
           />
-          <div className="grid lg:grid-cols-[0.85fr_1.15fr]">
+          <div className="grid grid-cols-1 lg:grid-cols-[0.85fr_1.15fr]">
             <Reveal className="border-b border-line p-6 min-[400px]:p-8 sm:p-10 lg:border-r lg:border-b-0 lg:p-14">
               <p className="eyebrow text-brand-blue">Partnership Value</p>
               <h2

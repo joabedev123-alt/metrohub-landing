@@ -36,7 +36,7 @@ export function Capabilities() {
           </h2>
         </Reveal>
 
-        <ul className="mt-12 grid gap-5 md:mt-14 md:grid-cols-3 lg:gap-6">
+        <ul className="mt-12 grid grid-cols-1 gap-5 md:mt-14 md:grid-cols-3 lg:gap-6">
           {CAPABILITIES.map((item, index) => (
             <Reveal as="li" key={item.title} delay={index * 80} className="flex">
               <article className="group flex w-full flex-col rounded-2xl border border-line bg-white p-6 shadow-card min-[400px]:p-7 transition-[transform,box-shadow,border-color] duration-300 hover:-translate-y-1 hover:border-brand-blue/30 hover:shadow-card-hover motion-reduce:transition-none motion-reduce:hover:translate-y-0 lg:p-8">

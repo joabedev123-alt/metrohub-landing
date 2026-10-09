@@ -67,9 +67,9 @@ export function Header() {
         Skip to main content
       </a>
 
-      <div className="container-page flex h-[72px] items-center lg:h-[80px] justify-between gap-6">
+      <div className="container-page flex h-[98px] items-center lg:h-[114px] [@media(max-height:500px)]:h-[72px] justify-between gap-6">
         <a href="#top" className="flex shrink-0 items-center" aria-label="Metrohub — back to top">
-          <Logo className="h-12 lg:h-[60px]" priority />
+          <Logo className="h-[86px] lg:h-[98px] [@media(max-height:500px)]:h-[60px]" priority />
         </a>
 
         <nav aria-label="Primary" className="hidden lg:block">

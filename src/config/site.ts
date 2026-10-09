@@ -22,10 +22,11 @@ export const siteConfig = {
   },
 
   contact: {
-    /** Business email, e.g. "partners@yourdomain.com". */
-    email: null as string | null,
-    /** Business phone in display format, e.g. "+1 (203) 555-0100". */
-    phone: null as string | null,
+    email: 'contact@metrohubusa.com' as string | null,
+    /** Display format. */
+    phone: '(914) 507-6361' as string | null,
+    /** E.164 format, used for tel: links and structured data. */
+    phoneE164: '+19145076361',
     emailPlaceholder: '[Your Business Email]',
     phonePlaceholder: '[Your Business Phone]',
   },
@@ -33,16 +34,16 @@ export const siteConfig = {
   logo: {
     /** Trimmed copy of public/logo.png (original kept untouched). */
     src: '/brand/metrohub-logo.webp',
-    width: 206,
-    height: 240,
+    width: 332,
+    height: 386,
     alt: 'Metrohub',
   },
 
   privacyPolicy: {
     /** Set to true once the policy text has been reviewed for publication. */
-    reviewed: false,
+    reviewed: true,
     /** Effective date shown in the policy, e.g. "January 15, 2027". */
-    lastUpdated: null as string | null,
+    lastUpdated: 'October 2026' as string | null,
   },
 
   copyrightYear: 2026,

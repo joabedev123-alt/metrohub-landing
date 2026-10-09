@@ -106,12 +106,12 @@ export function HeroGraphic() {
 /** Compact version for small screens. */
 export function HeroGraphicCompact() {
   return (
-    <div className="flex items-center gap-2.5 text-[10.5px] font-semibold tracking-[0.16em] text-white/70 uppercase sm:gap-3 sm:text-[11px]" aria-hidden="true">
+    <div className="flex min-w-0 items-center gap-1.5 text-[11px] font-semibold tracking-[0.06em] text-white/70 uppercase min-[360px]:gap-2.5 min-[360px]:tracking-[0.16em] sm:gap-3" aria-hidden="true">
       {NODES.map((node, index) => (
         <span key={node.label} className="contents">
           {index > 0 && <span className="h-px flex-1 bg-gradient-to-r from-brand-cyan/70 to-brand-blue/70" />}
           <span className="flex items-center gap-1.5 whitespace-nowrap">
-            <span className="h-1.5 w-1.5 rounded-full bg-brand-cyan" />
+            <span className="hidden h-1.5 w-1.5 rounded-full bg-brand-cyan min-[360px]:block" />
             {node.label}
           </span>
         </span>

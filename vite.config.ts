@@ -26,7 +26,7 @@ function structuredData(): Plugin {
         },
       }
       if (contact.email) organization.email = contact.email
-      if (contact.phone) organization.telephone = contact.phone
+      if (contact.phone) organization.telephone = contact.phoneE164
       if (siteConfig.siteUrl) organization.url = siteConfig.siteUrl
 
       const json = JSON.stringify(organization).replace(/</g, '\u003c')

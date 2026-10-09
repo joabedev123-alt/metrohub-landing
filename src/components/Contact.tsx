@@ -16,7 +16,7 @@ function Placeholder({ text }: { text: string }) {
 
 export function Contact() {
   const { contact, location, legalName } = siteConfig
-  const telHref = contact.phone ? `tel:${contact.phone.replace(/[^\d+]/g, '')}` : null
+  const telHref = contact.phone ? `tel:${contact.phoneE164}` : null
 
   const details: { icon: IconName; term: string; value: React.ReactNode }[] = [
     { icon: 'building', term: 'Legal Entity', value: legalName },
@@ -25,7 +25,7 @@ export function Contact() {
       icon: 'envelope',
       term: 'Email',
       value: contact.email ? (
-        <a href={`mailto:${contact.email}`} className="text-white underline decoration-white/25 underline-offset-4 hover:decoration-brand-cyan">
+        <a href={`mailto:${contact.email}`} className="-my-3 inline-block py-3 text-white underline decoration-white/25 underline-offset-4 hover:decoration-brand-cyan">
           {contact.email}
         </a>
       ) : (
@@ -37,7 +37,7 @@ export function Contact() {
       term: 'Phone',
       value:
         contact.phone && telHref ? (
-          <a href={telHref} className="text-white underline decoration-white/25 underline-offset-4 hover:decoration-brand-cyan">
+          <a href={telHref} className="-my-3 inline-block py-3 text-white underline decoration-white/25 underline-offset-4 hover:decoration-brand-cyan">
             {contact.phone}
           </a>
         ) : (
@@ -53,18 +53,18 @@ export function Contact() {
         <div className="absolute right-[-15%] bottom-[-25%] h-[380px] w-[520px] bg-[radial-gradient(closest-side,rgb(211_38_138/0.12),transparent)]" />
       </div>
 
-      <div className="container-page grid gap-12 lg:grid-cols-[0.82fr_1.18fr] lg:gap-16">
+      <div className="container-page grid grid-cols-1 gap-12 lg:grid-cols-[0.82fr_1.18fr] lg:gap-16">
         <Reveal>
-          <p className="eyebrow text-brand-cyan">Contact</p>
           <h2
             id="contact-title"
-            className="mt-5 text-[clamp(1.95rem,1.4rem+1.9vw,2.85rem)] leading-[1.1] font-semibold tracking-[-0.02em] text-balance"
+            className="text-[clamp(1.95rem,1.4rem+1.9vw,2.85rem)] leading-[1.1] font-semibold tracking-[-0.02em] text-balance"
           >
             Let&rsquo;s Build a Partnership
           </h2>
           <p className="mt-5 max-w-md leading-relaxed text-muted-dark">
-            Suppliers, wholesale distributors, and brand partners can reach our team through the
-            details below or the vendor inquiry form.
+            Metrohub LLC is a commercial retail and e-commerce enterprise focused on wholesale
+            sourcing, marketplace distribution, and streamlined supply chain operations across leading
+            US channels.
           </p>
 
           <div className="mt-10 rounded-2xl border border-white/10 bg-white/[0.03] p-6 sm:p-7">
