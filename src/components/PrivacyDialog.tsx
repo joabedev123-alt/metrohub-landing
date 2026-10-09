@@ -116,7 +116,9 @@ export function PrivacyDialog({ open, onClose }: PrivacyDialogProps) {
           <p>
             {legalName}
             <br />
-            {location.city}, {location.state}, {location.country}
+            {location.street}
+            <br />
+            {location.city}, {location.state} {location.postalCode}, {location.country}
             <br />
             {contact.email ? (
               <a href={'mailto:' + contact.email} className="-my-3 inline-block py-3 text-brand-blue underline underline-offset-4">

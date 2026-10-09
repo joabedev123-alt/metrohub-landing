@@ -24,9 +24,15 @@ function ColumnTitle({ children }: { children: string }) {
 export function Footer({ onOpenPrivacy }: FooterProps) {
   const { contact, location, legalName } = siteConfig
 
-  const details: { icon: IconName; label: string; value: string; href?: string; pending?: boolean }[] = [
+  const details: { icon: IconName; label: string; value: string; href?: string; external?: boolean; pending?: boolean }[] = [
     { icon: 'building', label: 'Legal Entity', value: legalName },
-    { icon: 'geo-alt', label: 'Location', value: `${location.city}, ${location.stateCode} – ${location.country}` },
+    {
+      icon: 'geo-alt',
+      label: 'Address',
+      value: `${location.street}, ${location.city}, ${location.stateCode} ${location.postalCode} – ${location.country}`,
+      href: `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${location.street}, ${location.city}, ${location.stateCode} ${location.postalCode}`)}`,
+      external: true,
+    },
     contact.email
       ? { icon: 'envelope', label: 'Email', value: contact.email, href: `mailto:${contact.email}` }
       : { icon: 'envelope', label: 'Email', value: contact.emailPlaceholder, pending: true },
@@ -96,7 +102,11 @@ export function Footer({ onOpenPrivacy }: FooterProps) {
                   <dt className="text-[12px] text-white/50">{item.label}</dt>
                   <dd className="text-[14px] break-words text-white/85">
                     {item.href ? (
-                      <a href={item.href} className="-my-3 inline-block py-3 transition-colors hover:text-brand-cyan">
+                      <a
+                        href={item.href}
+                        {...(item.external && { target: '_blank', rel: 'noopener noreferrer' })}
+                        className="-my-3 inline-block py-3 transition-colors hover:text-brand-cyan"
+                      >
                         {item.value}
                       </a>
                     ) : item.pending ? (

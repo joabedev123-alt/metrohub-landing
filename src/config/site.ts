@@ -14,6 +14,8 @@ export const siteConfig = {
   siteUrl: null as string | null,
 
   location: {
+    street: '18 Hudson St',
+    postalCode: '06801',
     city: 'Bethel',
     stateCode: 'CT',
     state: 'Connecticut',

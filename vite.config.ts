@@ -20,8 +20,10 @@ function structuredData(): Plugin {
         description: siteConfig.description,
         address: {
           '@type': 'PostalAddress',
+          streetAddress: location.street,
           addressLocality: location.city,
           addressRegion: location.stateCode,
+          postalCode: location.postalCode,
           addressCountry: location.countryCode,
         },
       }
