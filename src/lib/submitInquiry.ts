@@ -1,3 +1,5 @@
+import { siteConfig } from '../config/site'
+
 export type InquiryPayload = {
   name: string
   company: string
@@ -16,12 +18,16 @@ export class InquiryNotConfiguredError extends Error {
 const REQUEST_TIMEOUT_MS = 15000
 
 /**
- * Sends a contact form message to the endpoint defined in VITE_FORM_ENDPOINT.
+ * Sends a contact form message to VITE_FORM_ENDPOINT, or, when unset, to
+ * FormSubmit (no server needed), which forwards it to the business email.
+ * The first submission triggers a one-time activation email to that address.
  * Throws when the endpoint is missing or the request does not succeed, so the
  * UI never reports a delivery that did not happen.
  */
 export async function submitInquiry(payload: InquiryPayload): Promise<void> {
-  const endpoint = import.meta.env.VITE_FORM_ENDPOINT?.trim()
+  const email = siteConfig.contact.email
+  const endpoint =
+    import.meta.env.VITE_FORM_ENDPOINT?.trim() || (email && `https://formsubmit.co/ajax/${email}`)
   if (!endpoint) throw new InquiryNotConfiguredError()
 
   const controller = new AbortController()
@@ -40,6 +46,11 @@ export async function submitInquiry(payload: InquiryPayload): Promise<void> {
     })
     if (!response.ok) {
       throw new Error(`Inquiry request failed with status ${response.status}.`)
+    }
+    // FormSubmit answers 200 with { success: "false" } when the form is not activated yet.
+    const result = await response.json().catch(() => null)
+    if (result?.success === false || result?.success === 'false') {
+      throw new Error(result.message ?? 'Inquiry was rejected by the form service.')
     }
   } finally {
     window.clearTimeout(timeout)
