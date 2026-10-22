@@ -15,12 +15,13 @@ export class InquiryNotConfiguredError extends Error {
   }
 }
 
-const REQUEST_TIMEOUT_MS = 15000
+// FormSubmit's AJAX endpoint is often slow (30–50s); aborting early looks like a failed send.
+const REQUEST_TIMEOUT_MS = 60000
 
 /**
  * Sends a contact form message to VITE_FORM_ENDPOINT, or, when unset, to
  * FormSubmit (no server needed), which forwards it to the business email.
- * The first submission triggers a one-time activation email to that address.
+ * The first submission from a new origin triggers a one-time activation email.
  * Throws when the endpoint is missing or the request does not succeed, so the
  * UI never reports a delivery that did not happen.
  */
@@ -41,6 +42,8 @@ export async function submitInquiry(payload: InquiryPayload): Promise<void> {
         ...payload,
         _replyto: payload.email,
         _subject: `Website message from ${payload.name}${payload.company ? ` (${payload.company})` : ''}`,
+        _template: 'table',
+        _captcha: 'false',
       }),
       signal: controller.signal,
     })

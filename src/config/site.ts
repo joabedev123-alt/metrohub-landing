@@ -11,7 +11,7 @@ export const siteConfig = {
     'Metrohub LLC is a Bethel, Connecticut-based consumer goods enterprise focused on wholesale sourcing, marketplace distribution, and logistics operations.',
 
   /** Public site URL (e.g. "https://www.example.com"). Leave null until the domain is confirmed. */
-  siteUrl: null as string | null,
+  siteUrl: 'https://metrohubusa.com' as string | null,
 
   location: {
     street: '18 Hudson St',
